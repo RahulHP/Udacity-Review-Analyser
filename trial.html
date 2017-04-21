@@ -31,12 +31,14 @@ path {
 <input id="refresh" type="submit">
 
 <script type="text/javascript">
-	init();
+	
 	$('#refresh').click(function(){
 		var token = $('#tokenInput').val();
-		jsonresponse = refresh(token);
+		// http://stackoverflow.com/questions/5187968/how-should-i-call-3-functions-in-order-to-execute-them-one-after-the-other
+		jsonresponse = refresh(token, init);
 		// TODO - Error in case empty text field
 		// TODO - Set input to blank
+		
 	});
 
 </script>

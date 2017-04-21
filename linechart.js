@@ -1,12 +1,11 @@
-function init(){
+function init(reviews){
 	var margin = {top: 30, right: 20, bottom: 30, left: 50},
     width = 600 - margin.left - margin.right,
     height = 270 - margin.top - margin.bottom;
 
     // http://bl.ocks.org/d3noob/b3ff6ae1c120eea654b5
 
-    // https://github.com/d3/d3-3.x-api-reference/blob/master/Time-Formatting.md
-    var parseDate = d3.time.format("%d-%m-%Y").parse;
+
 
 
     var x = d3.time.scale().range([0, width]);
@@ -34,38 +33,40 @@ function init(){
 	//var dataset=d3.csv.parse("parsed.csv");
 
 	// http://bl.ocks.org/enjalot/1525346
-	d3.csv("parsed.csv",function(reviews)
-	{
-		//console.log("reviews:",reviews)
+
+		//console.log("reviews:",reviews);
+		console.log(reviews[0]);
+		var parseDate = d3.time.format.iso;
+		var data = [];
 		data = reviews.map(function(d)
 		{
-			//console.log("d",d);
-			day = d.day;
-			month = d.month;
-			year = d.year;
-			price = d.price;
-			p_id = d.project_id;
-			date = d.day+"-"+d.month+"-"+d.year;
+			price = +d.price;
+			//https://github.com/d3/d3-3.x-api-reference/blob/master/Time-Formatting.md
+			day = +d3.time.format("%d")((parseDate.parse(d.completed_at)));
+			month = +d3.time.format("%m")((parseDate.parse(d.completed_at)));
+			year = +d3.time.format("%Y")((parseDate.parse(d.completed_at)));
+			completed_at = d.completed_at
+			p_id = +d.project_id;
 			//console.log("day: ",date);
-			return {"date":date, "day":day, "month":month, "year":year, "price":price};
+			return {"day":day, "month":month, "completed_at":completed_at, "year":year, "price":price, 'p_id':price};
 		})
+		
 		//console.log("data",data);
-
+		
 		// http://learnjsdata.com/group_data.html
 		var reviewsByMonth = d3.nest()
 			.key(function(d) {return d.month;})
-			.key(function(d) {return d.day;})
 			.rollup(function(v) {return {
 				count : v.length,
 				total : d3.sum(v, function(d){return d.price;}),
 				avg : d3.mean(v, function(d){return d.price;})
 			}; })
 			.entries(data);
-
+		
 		//console.log(reviewsByMonth);
-
+		
 		var reviewsByDate = d3.nest()
-			.key(function(d) {return d.date;})
+			.key(function(d) {return d3.time.format("%d-%m-%Y")((parseDate.parse(d.completed_at)));})
 			.rollup(function(v) {return {
 				//count : v.length,
 				total : d3.sum(v, function(d){return d.price;}),
@@ -74,7 +75,9 @@ function init(){
 			.entries(data);
 
 		//console.log(reviewsByDate);
-
+		
+    // https://github.com/d3/d3-3.x-api-reference/blob/master/Time-Formatting.md
+    	var parseDate = d3.time.format("%d-%m-%Y").parse;
 		reviewsByDate.forEach(function(d){
 			d.date = parseDate(d.key);
 			d.total = +d.values.total;
@@ -100,15 +103,6 @@ function init(){
             svg.append("g")
         .attr("class", "y axis")
         .call(yAxis);
-
-	})
-	//console.log(dataset.length);
-
-	//<--,function(data){
-	//	dataset=data;
-	//	console.log(data[20]);
-	//	console.log(dataset.length)
-	//})
 
 
 }

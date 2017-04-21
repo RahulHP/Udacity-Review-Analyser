@@ -7,12 +7,13 @@ function refresh(token){
 		if(isJson(response)){
 				console.log("Good JSON");
 				//console.log(response);
-				return response;
+				init(response);
+				//return response;
 			} else {
 				console.log("Bad JSON");
 			}
 	})
-
+	
 	// http://stackoverflow.com/questions/6792878/jquery-ajax-error-function
 	/*$.ajax({method: 'GET',
 		url: 'https://review-api.udacity.com/api/v1/me/submissions/completed.json',
