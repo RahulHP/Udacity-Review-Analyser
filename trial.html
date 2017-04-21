@@ -3,6 +3,7 @@
 <head>
 <script src="https://d3js.org/d3.v3.min.js"></script>
 <script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
+<script src="global.js"></script>
 <script src="data.js"></script>
 <script src="linechart.js"></script>
 	<title>D3</title>
@@ -26,29 +27,41 @@ path {
 div.tooltip {	
     position: absolute;			
     text-align: center;			
-    width: 80px;					
-    height: 50px;					
+    width: 100px;					
+    height: 70px;					
     padding: 2px;				
     font: 12px sans-serif;		
     background: lightsteelblue;	
     border: 0px;		
     border-radius: 8px;			
-    pointer-events: none;			
+    pointer-events: none;
 }
 
 </style>
 </head>
 <body>
+<div id="linechartHolder"> </div>
 fds
 <input type="text" id="tokenInput">
 <input id="refresh" type="submit">
-
+<div id='variable_option' style="display: none;">
+<br>
+Total<input type="radio" name="variable" id="total" checked="checked" value="total"><br>
+Count<input type="radio" name="variable" id="count" value="count"><br>
+Average<input type="radio" name="variable" id="avg" value="avg"><br>
+</div>
 <script type="text/javascript">
 	
 	$('#refresh').click(function(){
 		var token = $('#tokenInput').val();
+         $("#variable_option").show();
 		// http://stackoverflow.com/questions/5187968/how-should-i-call-3-functions-in-order-to-execute-them-one-after-the-other
-		jsonresponse = refresh(token, init);
+		refresh(token);
+
+        $('input[type=radio][name=variable]').change(function(){
+            drawLineChart(reviewsByDate,this.value);
+
+        })
 		// TODO - Error in case empty text field
 		// TODO - Set input to blank
 		

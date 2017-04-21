@@ -22,8 +22,9 @@ function refresh(token){
 		success: function(response){
 			if(isJson(response)){
 				console.log("Good JSON");
-				console.log(response);
-				return response;
+				//console.log(response);
+				init(response);
+				//return response;
 			} else {
 				console.log("Bad JSON");
 			}
