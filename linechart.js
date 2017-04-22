@@ -55,6 +55,7 @@ function drawLineChart2(reviewsByDate){
 	
 nv.addGraph(function() {
     var chart = nv.models.lineWithFocusChart()
+    	.height(500)
         .x(function(d) {console.log(d);return d['x'];});//d3.time.format("%Y-%m-%dT%H:%M:%S").parse(d['x']);});
 
     chart.yAxis
@@ -77,16 +78,6 @@ nv.addGraph(function() {
     return chart;
 });
 
-var format = d3.time.format("%m/%d/%Y");
-data_lineWithFocusChart= [{ 
-    "values": 
-    [{"y": -6, "x": "2014-01-01T10:00:00"}, 
-     {"y": 5,  "x": "2014-02-01T10:10:00"}, 
-     {"y": -1, "x": "2014-03-01T10:20:00"}
-    ], 
-    "key": "Serie 1", 
-    "yAxis": 2}
-];
 }
 function drawLineChart(reviewsByDate,field){
 	d3.select("#linechartHolder").selectAll("*").remove();
@@ -253,7 +244,7 @@ function prepareData(reviews){
 			return new Date(a.date).getTime() - new Date(b.date).getTime()
 		});	
 		//console.log(reviewsByDate);
-		//drawPieChart(reviewsByProject);
+		drawPieChart(reviewsByProject);
 		//drawLineChart(reviewsByDate,'total');
 		drawLineChart2(reviewsByDate);
 }
