@@ -1,7 +1,32 @@
 function drawPieChart(reviewsByProject){
+	
+	var height = 350;
+    var width = 350;
+    console.log(reviewsByProject);
+    nv.addGraph(function() {
+        var chart = nv.models.pieChart()
+            .x(function(d) {  return d.p_name })
+            .y(function(d) { return d.total })
+            .growOnHover(true)
+            .color(d3.scale.category10().range())
+            .labelType('percent')
+            .legendPosition('top')
+            .showTooltipPercent(true)
+            .width(width)
+            .height(height);
+
+        d3.select("#piechartHolder")
+            .datum(reviewsByProject)
+            .transition().duration(1200)
+            .attr('width', width)
+            .attr('height', height)
+            .call(chart);
+
+
+        return chart;
+    });
 
 }
-
 
 function drawLineChart(reviewsByDate,field){
 	d3.select("#linechartHolder").selectAll("*").remove();
@@ -53,6 +78,7 @@ function drawLineChart(reviewsByDate,field){
 		//console.log(reviewsByDate);
 		svg.append("path")
         .attr("class", "line")
+        .attr("class", "graph")
         .attr("d", valueline(reviewsByDate));
 
         svg.append("g")
@@ -88,7 +114,7 @@ function drawLineChart(reviewsByDate,field){
 }
 
 function prepareData(reviews){
-		console.log(reviews);
+		//console.log(reviews);
 		var parseDate = d3.time.format.iso;
 		data = [];
 		data = reviews.map(function(d)
@@ -105,7 +131,7 @@ function prepareData(reviews){
 			return {"day":day, "month":month, "completed_at":completed_at, "year":year, "price":price, 'p_id':p_id, 'p_name':p_name};
 		})
 		
-		console.log("data",data);
+		//console.log("data",data);
 		
 		// http://learnjsdata.com/group_data.html
 		//var reviewsByMonth = d3.nest()
@@ -140,7 +166,7 @@ function prepareData(reviews){
 			}; })
 			.entries(data);
 
-		console.log(reviewsByProject);
+		//console.log(reviewsByProject);
 
 		reviewsByProject.forEach(function(d){
 			d.p_id = d.key;
@@ -150,10 +176,10 @@ function prepareData(reviews){
 			d.avg = d.values[0].values.avg;
 		});
 
-		console.log(reviewsByProject);
+		//console.log(reviewsByProject);
 
 
-    // https://github.com/d3/d3-3.x-api-reference/blob/master/Time-Formatting.md
+    	// https://github.com/d3/d3-3.x-api-reference/blob/master/Time-Formatting.md
     	var parseDate = d3.time.format("%d-%m-%Y").parse;
 		reviewsByDate.forEach(function(d){
 			d.date = parseDate(d.key);
@@ -166,7 +192,7 @@ function prepareData(reviews){
 		reviewsByDate.sort(function(a,b){
 			return new Date(a.date).getTime() - new Date(b.date).getTime()
 		});	
-
+		drawPieChart(reviewsByProject);
 		drawLineChart(reviewsByDate,'total');
 }
 
