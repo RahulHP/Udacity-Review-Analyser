@@ -27,7 +27,67 @@ function drawPieChart(reviewsByProject){
     });
 
 }
+function drawLineChart2(reviewsByDate){
+	console.log("Initialising");
+	console.log(reviewsByDate);
+	data = [{
+		"values":[],
+		"key" : "total",
+		"yAxis":1
+	},
+	{
+		"values":[],
+		"key" : "avg",
+		"yAxis":1
+	},
+	{
+		"values":[],
+		"key" : "count",
+		"yAxis":1
+	}]
+	reviewsByDate.forEach(function(d){
+		//console.log(d);
+		data[0]['values'].push({"y":d["total"],"x":d["date"]});
+		data[1]['values'].push({"y":d["avg"],"x":d["date"]});
+		data[2]['values'].push({"y":d["count"],"x":d["date"]});
+	});
+	console.log(data);
+	
+nv.addGraph(function() {
+    var chart = nv.models.lineWithFocusChart()
+        .x(function(d) {console.log(d);return d['x'];});//d3.time.format("%Y-%m-%dT%H:%M:%S").parse(d['x']);});
 
+    chart.yAxis
+    .tickFormat(d3.format(',.2f'));
+
+    chart.y2Axis
+    .tickFormat(d3.format(',.2f'));
+
+    chart.xAxis
+    .tickFormat(function(d) { return d3.time.format('%d %b %Y')(new Date(d)) });
+
+    chart.x2Axis
+    .tickFormat(function(d) { return d3.time.format('%d %b %Y')(new Date(d)) });
+    
+    d3.select('#linechartHolder')
+    .datum(data)
+    .transition().duration(500)
+    .call(chart);
+    
+    return chart;
+});
+
+var format = d3.time.format("%m/%d/%Y");
+data_lineWithFocusChart= [{ 
+    "values": 
+    [{"y": -6, "x": "2014-01-01T10:00:00"}, 
+     {"y": 5,  "x": "2014-02-01T10:10:00"}, 
+     {"y": -1, "x": "2014-03-01T10:20:00"}
+    ], 
+    "key": "Serie 1", 
+    "yAxis": 2}
+];
+}
 function drawLineChart(reviewsByDate,field){
 	d3.select("#linechartHolder").selectAll("*").remove();
 	console.log("Initialising", field);
@@ -192,8 +252,10 @@ function prepareData(reviews){
 		reviewsByDate.sort(function(a,b){
 			return new Date(a.date).getTime() - new Date(b.date).getTime()
 		});	
-		drawPieChart(reviewsByProject);
-		drawLineChart(reviewsByDate,'total');
+		//console.log(reviewsByDate);
+		//drawPieChart(reviewsByProject);
+		//drawLineChart(reviewsByDate,'total');
+		drawLineChart2(reviewsByDate);
 }
 
 
