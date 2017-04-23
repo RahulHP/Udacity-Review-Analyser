@@ -27,6 +27,70 @@ function drawPieChart(reviewsByProject){
     });
 
 }
+
+function createYearTable(reviewsByYear){
+	var table = document.getElementById("yearlyTable");
+	var header = table.createTHead();
+
+	var row = header.insertRow(0);
+	var cell = row.insertCell(0);
+	cell.innerHTML = "Year";
+
+	var cell = row.insertCell(1);
+	cell.innerHTML = "USD";
+
+	reviewsByYear.forEach(function(d){
+		var row = table.insertRow();
+		var cell = row.insertCell(0);
+		cell.innerHTML = +d.key;
+
+		var cell = row.insertCell(1);
+		cell.innerHTML = +d.values.total;
+	})
+};
+
+
+function createMonthTable(reviewsByMonth){
+	var monthNames = ["January", "February", "March", "April", "May", "June",
+	"July", "August", "September", "October", "November", "December"];
+	var table = document.getElementById("monthlyTable");
+
+	var header = table.createTHead();
+
+	var row = header.insertRow(0);
+
+	var cell = row.insertCell(0);
+	cell.innerHTML = "Month";
+
+	var cell = row.insertCell(1);
+	cell.innerHTML = "Year";
+
+	var cell = row.insertCell(2);
+	cell.innerHTML = "USD";
+
+	reviewsByMonth.forEach(function(d){
+		
+		d.values.forEach(function (i){
+			var row = table.insertRow();
+			console.log(i);
+
+			var cell = row.insertCell(0);
+			cell.innerHTML = monthNames[+i.key];
+
+			var cell = row.insertCell(1);
+			cell.innerHTML = +d.key;
+			var cell = row.insertCell(2);
+			cell.innerHTML = +i.values.total + " $"
+
+		})
+		
+
+
+
+
+	})
+}
+
 function drawLineChart2(reviewsByDate){
 	console.log("Initialising");
 	console.log(reviewsByDate);
@@ -53,7 +117,7 @@ function drawLineChart2(reviewsByDate){
 	});
 	console.log(data);
 	
-nv.addGraph(function() {
+	nv.addGraph(function() {
     var chart = nv.models.lineWithFocusChart()
     	.height(500)
         .x(function(d) {console.log(d);return d['x'];});//d3.time.format("%Y-%m-%dT%H:%M:%S").parse(d['x']);});
@@ -76,92 +140,8 @@ nv.addGraph(function() {
     .call(chart);
     
     return chart;
-});
+	});
 
-}
-function drawLineChart(reviewsByDate,field){
-	d3.select("#linechartHolder").selectAll("*").remove();
-	console.log("Initialising", field);
-	var margin = {top: 30, right: 20, bottom: 30, left: 50},
-    width = 600 - margin.left - margin.right,
-    height = 270 - margin.top - margin.bottom;
-
-    // Basic CSV Parsing http://bl.ocks.org/d3noob/b3ff6ae1c120eea654b5
-
-
-
-	var formatTime = d3.time.format("%e %B");
-
-    var x = d3.time.scale().range([0, width]);
-	var y = d3.scale.linear().range([height, 0]);
-
-	var xAxis = d3.svg.axis().scale(x)
-    .orient("bottom").ticks(5);
-
-	var yAxis = d3.svg.axis().scale(y)
-    .orient("left").ticks(5);
-
-	// Define the line
-	var valueline = d3.svg.line()
-    .x(function(d) { return x(d.date); })
-    .y(function(d) { return y(d[field]);});
-
-    var svg = d3.select("#linechartHolder")
-    .append("svg")
-        .attr("width", width + margin.left + margin.right)
-        .attr("height", height + margin.top + margin.bottom)
-    .append("g")
-        .attr("transform", 
-              "translate(" + margin.left + "," + margin.top + ")");
-
-	var div = d3.select("#linechartHolder").append("div")	
-    					.attr("class", "tooltip")				
-    					.style("opacity", 0);
-
-	//var dataset=d3.csv.parse("parsed.csv");
-
-	// http://bl.ocks.org/enjalot/1525346
-		
-
-		x.domain(d3.extent(reviewsByDate, function(d) { return d.date; }));
-		y.domain([0, d3.max(reviewsByDate, function(d) { return d[field]; })]);
-
-		//console.log(reviewsByDate);
-		svg.append("path")
-        .attr("class", "line")
-        .attr("class", "graph")
-        .attr("d", valueline(reviewsByDate));
-
-        svg.append("g")
-        .attr("class", "x axis")
-        .attr("transform", "translate(0," + height + ")")
-        .call(xAxis);
-
-            svg.append("g")
-        .attr("class", "y axis")
-        .call(yAxis);
-
-
-    svg.selectAll("dot")
-        .data(reviewsByDate)
-      .enter().append("circle")
-        .attr("r", 3)
-        .attr("cx", function(d) { return x(d.date); })
-        .attr("cy", function(d) { return y(d[field]); })
-        .on("mouseover", function(d) {		
-            div.transition()		
-                .duration(200)		
-                .style("opacity", .9);		
-            div	.html(formatTime(new Date(d.date)) + "<br/>"  + "Total : " + d.total + "$<br/>"  + "Reviews : " + d.count+ "<br/>Average : " + parseFloat(d.avg).toFixed(2)+"$")	
-                .style("left", (d3.event.pageX) + "px")		
-                .style("top", (d3.event.pageY - 28) + "px");	
-            })					
-        .on("mouseout", function(d) {		
-            div.transition()		
-                .duration(500)		
-                .style("opacity", 0);
-            })
-        ;        
 }
 
 function prepareData(reviews){
@@ -182,19 +162,29 @@ function prepareData(reviews){
 			return {"day":day, "month":month, "completed_at":completed_at, "year":year, "price":price, 'p_id':p_id, 'p_name':p_name};
 		})
 		
-		//console.log("data",data);
+		console.log("data",data);
 		
-		// http://learnjsdata.com/group_data.html
-		//var reviewsByMonth = d3.nest()
-		//	.key(function(d) {return d.month;})
-		//	.rollup(function(v) {return {
-		//		count : v.length,
-		//		total : d3.sum(v, function(d){return d.price;}),
-		//		avg : d3.mean(v, function(d){return d.price;})
-		//	}; })
-		//	.entries(data);
+		//http://learnjsdata.com/group_data.html
+		var reviewsByMonth = d3.nest()
+			.key(function(d) {return d.year;})
+			.key(function(d) {return d.month;})
+			.rollup(function(v) {return {
+				count : v.length,
+				total : d3.sum(v, function(d){return d.price;}),
+				avg : d3.mean(v, function(d){return d.price;})
+			}; })
+			.entries(data);
 		
-		//console.log(reviewsByMonth);
+		var reviewsByYear = d3.nest()
+			.key(function(d) {return d.year;})
+			.rollup(function(v) {return {
+				count : v.length,
+				total : d3.sum(v, function(d){return d.price;}),
+				avg : d3.mean(v, function(d){return d.price;})
+			}; })
+			.entries(data);
+
+		console.log(reviewsByMonth);
 		
 		reviewsByDate = d3.nest()
 			.key(function(d) {return d3.time.format("%d-%m-%Y")((parseDate.parse(d.completed_at)));})
@@ -245,7 +235,8 @@ function prepareData(reviews){
 		});	
 		//console.log(reviewsByDate);
 		drawPieChart(reviewsByProject);
-		//drawLineChart(reviewsByDate,'total');
+		createMonthTable(reviewsByMonth);
+		createYearTable(reviewsByYear);
 		drawLineChart2(reviewsByDate);
 }
 

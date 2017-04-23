@@ -3,7 +3,7 @@ function refresh(token){
 	// https://github.com/simplydallas/udacityreviewparser/blob/gh-pages/js/main.js#L313
 
 	// Using .getJSON for debugging purposes. .ajax will be used for production
-	/*$.getJSON("local.json",function(response){
+	$.getJSON("local.json",function(response){
 		if(isJson(response)){
 				console.log("Good JSON");
 				//console.log(response);
@@ -12,10 +12,10 @@ function refresh(token){
 			} else {
 				console.log("Bad JSON");
 			}
-	})*/
+	})
 	
 	// http://stackoverflow.com/questions/6792878/jquery-ajax-error-function
-	$.ajax({method: 'GET',
+	/*$.ajax({method: 'GET',
 		url: 'https://review-api.udacity.com/api/v1/me/submissions/completed.json',
 		data: {start_date : 0 },
 		headers: {Authorization: token},
@@ -33,7 +33,7 @@ function refresh(token){
 		error: function(response){
 			console.log(response);
 		}
-	})
+	})*/
 }
 
 // https://github.com/simplydallas/udacityreviewparser/blob/gh-pages/js/main.js#L855
