@@ -11,7 +11,7 @@ function updateGlobalNav(reviewsByProject){
 
 	var spnSt = '<span class="text-success">';
     $('.reviewCount').html('Reviews: ' + spnSt + totalReviews + '</span> <span class="caret"></span>')
-    $('.moneyCount').html('Reviews: ' + spnSt + totalEarned + '</span> <span class="caret"></span>')
+    $('.moneyCount').html('Earned: ' + spnSt + totalEarned + '</span> <span class="caret"></span>')
 	// https://github.com/simplydallas/udacityreviewparser/blob/gh-pages/js/main.js#L271
 	var projReview = '';
 	var projMoney = '';
