@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.17/d3.min.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/nvd3/1.8.5/nv.d3.min.js"></script>
+	 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+		
+		<link href="https://cdnjs.cloudflare.com/ajax/libs/nvd3/1.8.5/nv.d3.min.css" rel="stylesheet">
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap-theme.min.css">
+		
+		<script src="global.js"></script>
+		<script src="data.js"></script>
+		<script src="linechart.js"></script>
+	<title>Udacity Review Analyser</title>
+</head>
+<body>
+<nav class="navbar navbar-inverse ">
+	<div class="container-fluid">
+		<div class="navbar-header">
+			<p class="navbar-text">Udacity Review Analyser</p>
+		</div>
+
+
+		<div id="hiddenNav" class="collapse">
+			
+			<div class="nav navbar-nav navbar-left">
+			<li class="dropdown">
+						<a class="dropdown-toggle reviewCount" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Reviews: <span class="caret"></span></a>
+						<ul class="dropdown-menu" id="reviewDD">
+						</ul>
+			</li>
+			</div>
+
+			<div class="nav navbar-nav navbar-left">
+			<li class="dropdown">
+						<a class="dropdown-toggle moneyCount" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Earned: <span class="caret"></span></a>
+						<ul class="dropdown-menu" id="moneyDD">
+						</ul>
+			</li>
+			</div>
+			
+			<div class="collapse navbar-collapse" id="pages">
+				<ul class="nav navbar-nav">
+					<li role="presentation" id="MonthlyReportButton" class="active"><a href="javascript:createMonthlyReport()">Monthly Report</a></li>
+					<li role="presentation" id="AnnualReportButton"><a href="javascript:createAnnualReport()">Annual Report</a></li>
+				</ul>
+
+				
+			</div>
+		</div>
+
+	</div>
+</nav>
+<div class="jumbotron" id="welcomeJumbotron">
+	<form action="#">
+		<div class="form-group">
+			<input type="text" class="form-control" placeholder="Enter your API key here" id="tokenInput">
+			<button type="submit" id="refresh" class="btn btn-default">Submit</button>
+		</div>
+	</form>
+</div>
+
+<div class="container-fluid" id="graphContainer">
+	
+</div>
+
+<script type="text/javascript">
+	$('#refresh').click(function(){
+			var token = $('#tokenInput').val();
+				//$("#variable_option").show();
+			refresh(token);
+
+			$('#welcomeJumbotron').hide();
+			$('#hiddenNav').show();
+	});   
+</script>
+</body>
+</html>

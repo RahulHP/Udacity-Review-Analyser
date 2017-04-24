@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <script src="https://d3js.org/d3.v3.min.js"></script>
-    <script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.17/d3.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/nvd3/1.8.5/nv.d3.min.css" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/nvd3/1.8.5/nv.d3.min.js"></script>    
     <!-- Latest compiled and minified CSS -->
@@ -46,6 +46,10 @@ path.graph{
 <body>
 <div>
 	Enter token here - <input type="text" id="tokenInput"><input id="refresh" type="submit">
+</div>
+<div class="container-fluid" id="graphContainer">
+<div id="collapsibleTableHolder">
+    <table id="collapsibleTable" class="table"></table>
 </div>
 <div id="yearlyTableHolder">
     <table id="yearlyTable" class="table"></table>
