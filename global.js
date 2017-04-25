@@ -1,1 +1,1 @@
-var data, reviewsByDate, reviewsByProject, currentMonthReviewsByDate, reviewsByMonth
+var data, reviewsByDate, reviewsByProject, currentMonthReviewsByDate, reviewsByMonth, earliestReviewDate, latestReviewDate

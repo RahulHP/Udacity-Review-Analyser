@@ -177,6 +177,7 @@ function createMonthlyReport(){
 	document.getElementById("AnnualReportButton").classList.remove("active");
 	var container = document.getElementById("graphContainer");
 	container.innerHTML = '';
+	createDatePicker();
 	createCurrentMonthDetails(currentMonthReviewsByDate);
 }
 
@@ -342,15 +343,21 @@ function prepareData(reviews){
 			day = +d3.time.format("%d")((parseDate.parse(d.completed_at)));
 			month = +d3.time.format("%m")((parseDate.parse(d.completed_at)));
 			year = +d3.time.format("%Y")((parseDate.parse(d.completed_at)));
-			completed_at = d.completed_at
+			completed_at = new Date(d.completed_at);
 			p_id = +d.project_id;
 			p_name = d.project.name;
 			//console.log("day: ",date);
 			return {"day":day, "month":month, "completed_at":completed_at, "year":year, "price":price, 'p_id':p_id, 'p_name':p_name};
-		})
+		});
+
+		earliestReviewDate = new Date( Math.min.apply(null, data.map(function(d){return d.completed_at.getTime();})));
+		console.log(earliestReviewDate);
+
+		latestReviewDate = new Date( Math.max.apply(null, data.map(function(d){return d.completed_at.getTime();})));
+		console.log(latestReviewDate);
 		
-		//console.log("data",data);
-		
+		//console.log(new Date(earliestReviewDate).getDate());
+		//console.log(new Date(latestReviewDate).getDate());
 		//http://learnjsdata.com/group_data.html
 		reviewsByMonth = d3.nest()
 			.key(function(d) {return d.year;})
@@ -424,6 +431,7 @@ function prepareData(reviews){
 			d.count = +d.values.count;
 			d.avg = +d.values.avg;
 		});
+		//createDatePicker();
 		createMonthlyReport(currentMonthReviewsByDate);
 		//createCurrentMonthDetails(currentMonthReviewsByDate);
 		//console.log(reviewsByDate);
@@ -432,6 +440,29 @@ function prepareData(reviews){
 		//createMonthTable(reviewsByMonth);
 		//createYearTable(reviewsByYear);
 		//drawLineChart2(reviewsByDate);
+}
+
+function createDatePicker(){
+	var container = document.getElementById("graphContainer");
+	container.innerHTML += '<div class="input-group date" id="MonthPicker"><input type="text" class="form-control"><span class="input-group-addon"><i class="glyphicon glyphicon-th"></i></span></div>'
+	// https://bootstrap-datepicker.readthedocs.io/en/stable/options.html
+	$(function() {
+  		$('#MonthPicker').datepicker({
+  			format: "MM yyyy",
+		    startView: 1,
+		    minViewMode: 1,
+		    maxViewMode: 2,
+		    todayBtn: "linked",
+		    orientation: "bottom left",
+		    autoclose : true,
+		    startDate : earliestReviewDate,
+		    endDate : latestReviewDate,
+  		}).on('changeDate', function(e){
+  			console.log(e);
+  			alert(e.date);
+  		});
+  		
+	});
 }
 
 
