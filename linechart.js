@@ -103,7 +103,7 @@ function createCollapsibleTable(reviewsByMonth){
 			cell.innerHTML = "";
 
 			var cell = row.insertCell(1);
-			cell.innerHTML = monthNames[+v.key];
+			cell.innerHTML = monthNames[+v.key-1];
 
 			var cell = row.insertCell(2);
 			cell.innerHTML = v.values.count;
